@@ -1,0 +1,10 @@
+# directories
+.vscode
+build/
+sprites/
+
+# binaries
+main
+test
+
+test.cpp
