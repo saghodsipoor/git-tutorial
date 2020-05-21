@@ -7,6 +7,7 @@
 class Board
 {
 public:
+  struct Index {int i, j;}; 
   struct Direction {int i, j;}; 
   struct Size { unsigned w, h; };
   struct Cell
@@ -31,12 +32,13 @@ public:
   }
 
   void print();
-
   Cell& operator()(int i, int j) { return  *(cells_ + size_.w * i + j); };
 
-  Board(Size size = {9, 9}): cells_(new Cell[size.w * size.h]) {}
-  ~Board() { delete[] cells_; }
+  Board(Size size = {9, 9});
+  ~Board();
 private:
+  void set_cell_values();
+  void plant_bombs();
   Size size_;
   Cell *cells_;
 };
