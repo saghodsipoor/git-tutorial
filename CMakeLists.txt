@@ -5,7 +5,7 @@ project(minesweeper)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-file(GLOB SOURCES Game.cpp Board.cpp main.cpp)
+file(GLOB SOURCES main.cpp Board.cpp)
 
 add_executable(minesweeper ${SOURCES})
 
