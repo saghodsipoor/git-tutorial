@@ -24,6 +24,10 @@ int main()
       b.toggle_flag({i, j});
       break;
 
+    case 'r':
+      b.reset();
+      break;
+
     case 'q':
       flag = false;
       break;

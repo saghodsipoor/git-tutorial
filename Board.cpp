@@ -6,6 +6,36 @@
 
 #include "Board.hpp"
 
+
+void Board::reset()
+{
+  delete[] cells_;
+  cells_ = new Cell[size_.w * size_.h];
+  plant_bombs();
+  set_cell_values();
+  game_is_on_ = true;
+}
+
+const std::string Board::cell_state(const Index& index)
+{
+  auto& cell = (*this)(index.i, index.j);
+  
+  if (cell.flagged)
+    return "flagged";
+
+  if (!cell.visitted)
+    return "unclicked";
+
+  // if visitted
+  if (cell.bombed)
+    return "bomb-clicked";
+
+  if (cell.neighbor_bombs == 0)
+    return "blank";
+
+  return std::to_string(cell.neighbor_bombs);
+}
+
 void Board::toggle_flag(Index index)
 {
   auto& cell = (*this)(index.i, index.j);

@@ -2,6 +2,7 @@
 #define GAME_HPP
 
 #include <iostream>
+#include <string>
 #include <vector>
 
 class Board
@@ -16,7 +17,9 @@ public:
     unsigned neighbor_bombs = 0;
   };
 
+  void reset();
   bool game_is_on() { return game_is_on_; }
+  const std::string cell_state(const Index& index);
   void toggle_flag(Index index);
   void visit(Index index);
   template <typename Function>
