@@ -6,6 +6,12 @@
 
 #include "Board.hpp"
 
+void Board::toggle_flag(Index index)
+{
+  auto& cell = (*this)(index.i, index.j);
+  if (!cell.visitted)
+    cell.flagged ^= true;
+}
 
 void Board::visit(Index index)
 {

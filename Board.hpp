@@ -17,6 +17,7 @@ public:
   };
 
   bool game_is_on() { return game_is_on_; }
+  void toggle_flag(Index index);
   void visit(Index index);
   template <typename Function>
   inline void for_each_row(Function f)

@@ -19,6 +19,11 @@ int main()
       b.visit({i, j});
       break;
     
+    case 'f':
+      std::cin  >> i >> j;
+      b.toggle_flag({i, j});
+      break;
+
     case 'q':
       flag = false;
       break;
