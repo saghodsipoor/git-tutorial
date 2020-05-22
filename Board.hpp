@@ -2,7 +2,7 @@
 #define GAME_HPP
 
 #include <iostream>
-
+#include <vector>
 
 class Board
 {
@@ -16,6 +16,8 @@ public:
     unsigned neighbor_bombs = 0;
   };
 
+  bool game_is_on() { return game_is_on_; }
+  void visit(Index index);
   template <typename Function>
   inline void for_each_row(Function f)
   {
@@ -41,7 +43,8 @@ private:
   bool index_is_valid(int i, int j);
   void plant_bombs();
   enum { directions_num_ = 8 };
-  static const Direction directions_[directions_num_];
+  static const std::vector<Direction> directions_;
+  bool game_is_on_ = true;
   Size size_;
   Cell *cells_;
 };

@@ -1,16 +1,61 @@
 #include <algorithm>
 #include <chrono>
 #include <iostream>
+#include <list>
 #include <vector>
 
 #include "Board.hpp"
 
 
+void Board::visit(Index index)
+{
+  auto& board = *this;
+  if (board(index.i, index.j).flagged)
+    return;
+  
+  // if cell isn't flagged
+  std::list<Index> to_visit({index});
+  while(!to_visit.empty())
+  {
+    index = to_visit.front();
+    auto& cell = board(index.i, index.j);
+    if (cell.bombed)
+    {
+      cell.visitted = true;
+      game_is_on_ = false;
+      break;
+    }
+    if (cell.neighbor_bombs != 0)
+    {
+      cell.visitted = true;
+      to_visit.pop_front();
+      continue;
+    }
+    
+    // checking neighbors' condition
+    for (const auto& dir : directions_)
+    {
+      int i = index.i + dir.i, j = index.j + dir.j;
+      // invalid index
+      if (!board.index_is_valid(i, j))
+        continue;
+      
+      if (board(i, j).flagged)
+        continue;
+      // blank cell
+      if (!board(i,j).visitted)
+        to_visit.push_back({i, j});
+    }
+    cell.visitted = true;
+    to_visit.pop_front();
+  }  
+}
+
 void Board::print()
 {
   static char red   [] = "\e[38;5;196m";
   static char green [] = "\e[38;5;46m";
-  static char blue  [] = "\e[38;5;46m";
+  static char blue  [] = "\e[38;5;26m";
   static char reset [] = "\e[0m";
   
   for_each_row([&](int i){
@@ -24,8 +69,8 @@ void Board::print()
         std::cout << red << " b " << reset;
       else
       {
-        if (cell.visitted) std::cout << green;
-        else std::cout << " " << cell.neighbor_bombs << " " << reset;
+        if (cell.visitted) std::cout << blue;
+        std::cout << " " << cell.neighbor_bombs << " " << reset;
       }
     }
     std::cout << std::endl;
@@ -78,5 +123,5 @@ void Board::plant_bombs()
     (*this)(indices[i].i, indices[i].j).bombed = true;
 }
 
-const Board::Direction Board::directions_[directions_num_] =
+const std::vector<Board::Direction> Board::directions_ =
     {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1,-1}, {1,0}, {1,1}};
