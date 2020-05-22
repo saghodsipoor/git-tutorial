@@ -35,11 +35,28 @@ void Board::print()
 Board::Board(Size size): size_(size), cells_(new Cell[size.w * size.h])
 {
   plant_bombs();
+  set_cell_values();
 }
 
 Board::~Board()
 {
   delete[] cells_;
+}
+
+void Board::set_cell_values()
+{
+  
+  for_each_cell([&](int i, int j){
+    for (int k = 0; k < directions_num_; ++k)
+      if (index_is_valid(i + directions_[k].i, j + directions_[k].j))
+        if ((*this)(i + directions_[k].i, j + directions_[k].j).bombed)
+          ++(*this)(i, j).neighbor_bombs;
+  });
+};
+
+bool Board::index_is_valid(int i, int j)
+{
+  return i >= 0 && i < size_.w && j >= 0 && j < size_.h;
 }
 
 void Board::plant_bombs()
@@ -60,3 +77,6 @@ void Board::plant_bombs()
   for (auto i = 0; i < bombs_num; ++i)
     (*this)(indices[i].i, indices[i].j).bombed = true;
 }
+
+const Board::Direction Board::directions_[directions_num_] =
+    {{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1,-1}, {1,0}, {1,1}};

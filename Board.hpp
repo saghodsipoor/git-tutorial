@@ -38,7 +38,10 @@ public:
   ~Board();
 private:
   void set_cell_values();
+  bool index_is_valid(int i, int j);
   void plant_bombs();
+  enum { directions_num_ = 8 };
+  static const Direction directions_[directions_num_];
   Size size_;
   Cell *cells_;
 };
