@@ -7,9 +7,9 @@ int main()
   Board b;
   b.print();
 
-  bool flag = true;
+  bool game_is_on = true;
   char command; int i, j;
-  while (flag)
+  while (game_is_on)
   {
     std::cin >> command;
     switch (command)
@@ -17,6 +17,8 @@ int main()
     case 'v':
       std::cin  >> i >> j;
       b.visit({i, j});
+      if (!b.game_is_on())
+        game_is_on = false;
       break;
     
     case 'f':
@@ -29,7 +31,7 @@ int main()
       break;
 
     case 'q':
-      flag = false;
+      game_is_on = false;
       break;
 
     default:

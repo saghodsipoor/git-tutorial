@@ -94,10 +94,19 @@ void Board::print()
   static char blue  [] = "\e[38;5;26m";
   static char reset [] = "\e[0m";
   
+  for (int i = 0; i < size_.w * 3 + 3; ++i)
+    std::cout << "-";
+  std::cout << std::endl;
+
   for_each_row([&](int i){
+    // row index
+    std::cout << i << " | ";
     for (auto j=0; j<size_.h; ++j)
     {
       const auto& cell = (*this)(i,j);
+      if (!cell.visitted)
+        std::cout << " - ";
+      else
       if (cell.flagged)
         std::cout << green << " f " << reset;
       else
