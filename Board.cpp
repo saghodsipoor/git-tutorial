@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <chrono>
+#include <iomanip>
 #include <iostream>
 #include <list>
 #include <vector>
@@ -89,33 +90,42 @@ void Board::visit(Index index)
 
 void Board::print()
 {
-  static char red   [] = "\e[38;5;196m";
-  static char green [] = "\e[38;5;46m";
-  static char blue  [] = "\e[38;5;26m";
-  static char reset [] = "\e[0m";
-  
-  for (int i = 0; i < size_.w * 3 + 3; ++i)
-    std::cout << "-";
+  static const char red   [] = "\e[38;5;196m";
+  static const char green [] = "\e[38;5;46m";
+  static const char blue  [] = "\e[38;5;26m";
+  static const char reset [] = "\e[0m";
+  static const int column_offset  = 4;
+  static const int column_width   = 3;
+
   std::cout << std::endl;
+  std::cout << std::setw(column_offset) << "";
+  for (int i = 0; i < size_.w; ++i)
+    std::cout << std::setw(column_width) << i;
+  std::cout << std::endl;
+  
+  // print upper border
+  std::cout << std::string(size_.w * column_width + column_offset, '-') << std::endl;
 
   for_each_row([&](int i){
     // row index
-    std::cout << i << " | ";
+    std::cout << std::setw(column_offset) << std::to_string(i) + " |";
     for (auto j=0; j<size_.h; ++j)
     {
+      // std::cout << std::setw(column_width);
       const auto& cell = (*this)(i,j);
-      if (!cell.visitted)
-        std::cout << " - ";
-      else
+
       if (cell.flagged)
-        std::cout << green << " f " << reset;
+        std::cout << green << std::setw(column_width) << "f" << reset;
+      else
+      if (!cell.visitted)
+        std::cout << std::setw(column_width) << "-";
       else
       if (cell.bombed)
-        std::cout << red << " b " << reset;
+        std::cout << red << std::setw(column_width) << "b" << reset;
       else
       {
         if (cell.visitted) std::cout << blue;
-        std::cout << " " << cell.neighbor_bombs << " " << reset;
+        std::cout << std::setw(column_width) << cell.neighbor_bombs << reset;
       }
     }
     std::cout << std::endl;
