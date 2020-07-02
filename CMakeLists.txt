@@ -7,7 +7,5 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 file(GLOB SOURCES main.cpp Board.cpp)
 
+set(CMAKE_BUILD_TYPE Debug)
 add_executable(minesweeper ${SOURCES})
-
-set(LIBS sfml-window sfml-graphics sfml-system)
-target_link_libraries(minesweeper ${LIBS})
